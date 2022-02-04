@@ -4,9 +4,8 @@ A Web Application for user to find the price of a used vehicle when buying or se
 There are mainly 4 aims and its objectives can be presented in ‘Smart Assistant’.
 
 01. To give a fair idea for the user of what factors could affect the price when buying a used vehicle
-
 02. To enable user to search vehicle prices without any skepticism
-
 03. To find available vehicle prices accurately easily at anytime
-
 04. To give an idea for the user about alternative vehicles that is similar to the predicted price
+
+Technologies: Python, React JS, Mongo DB, Flask, Bootstrap, Parsehub 
