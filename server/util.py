@@ -2,7 +2,6 @@ import pickle
 import json
 import numpy as np
 
-__locations = None
 __data_columns = None
 __model = None
 __transmission = None
@@ -44,7 +43,7 @@ def get_estimated_price(brand,vehicle_model,year,mileage,fuel,transmission,condi
 
     x = np.zeros(len(__data_columns))
     x[0] = mileage
-    x[308]=2022-year
+    x[304]=2022-year
     if brand_index >= 0:
         x[brand_index] = 1
         
@@ -69,7 +68,6 @@ def get_estimated_price(brand,vehicle_model,year,mileage,fuel,transmission,condi
 def load_saved_artifacts():
     print("loading saved artifacts...start")
     global  __data_columns
-    global __locations
     global __transmission
     global __condition
     global __fuel
@@ -79,22 +77,18 @@ def load_saved_artifacts():
 
     with open("artifacts/columns.json", "r") as f:
         __data_columns = json.load(f)['data_columns']
-        # __locations = __data_columns[3:]  # first 3 columns are sqft, bath, bhk
         __transmission = __data_columns[1:5]
         __condition = __data_columns[5:8]
         __fuel = __data_columns[8:14]
-        __vehiclemodel = __data_columns[14:257]
-        __brand = __data_columns[257:308]
-        __capacity = __data_columns[309:600]
+        __vehiclemodel = __data_columns[14:255]
+        __brand = __data_columns[255:304]
+        __capacity = __data_columns[305:594]
 
     global __model
     if __model is None:
         with open('artifacts/used_vehicle_prices_model.pickle', 'rb') as f:
             __model = pickle.load(f)
     print("loading saved artifacts...done")
-
-def get_location_names():
-    return __locations
 
 def get_transmission_types():
     return __transmission
@@ -124,6 +118,6 @@ if __name__ == '__main__':
     # print(get_fuel_types())
     # print(get_vehiclemodel_types())
     # print(get_capacity_types())
-    print(get_estimated_price('Toyota','CHR',2018,28983,'Petrol','Automatic','Used','1200'))
+    # print(get_estimated_price('Toyota','CHR',2018,28983,'Petrol','Automatic','Used','1200'))
     print(get_estimated_price('Suzuki','Alto',2015,15000,'Petrol','Automatic','Used','998'))
-    print(get_estimated_price('Toyota','Prius',2012,112000,'Petrol','Automatic','Used','1800'))
+    # print(get_estimated_price('Toyota','Prius',2012,112000,'Petrol','Automatic','Used','1800'))
