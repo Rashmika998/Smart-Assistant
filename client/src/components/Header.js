@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navbar, Container, NavDropdown, Nav, Offcanvas, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, NavLink, Container, NavDropdown, Nav, Offcanvas, Form, FormControl, Button } from 'react-bootstrap';
 
 export default function Header() {
     return (
@@ -20,7 +20,7 @@ export default function Header() {
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
-                            <Nav.Link href="#action1">Home</Nav.Link>
+                            <NavLink to='/home' >Home</NavLink>
                             <Nav.Link href="#action2">Admin Login</Nav.Link>
                             <NavDropdown title="Dropdown" id="offcanvasNavbarDropdown">
                                 <NavDropdown.Item href="#action3">Action</NavDropdown.Item>

@@ -78,6 +78,17 @@ def get_capacity_types():
 
     return response
 
+@app.route('/get_related_vehicles', methods=['GET','POST'])
+def get_related_vehicles():
+    price = float(request.json['price'])
+    year = int(request.json['year'])
+    response = jsonify({
+        'vehicles': util.get_related_vehicles(price,year)
+    })
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    return response
+
 if __name__ == "__main__":
     print("Starting Python Flask Server For Vehicle Price Prediction...")
     util.load_saved_artifacts()

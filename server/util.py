@@ -74,6 +74,7 @@ def load_saved_artifacts():
     global __vehiclemodel
     global __brand
     global __capacity
+   
 
     with open("artifacts/columns.json", "r") as f:
         __data_columns = json.load(f)['data_columns']
@@ -111,6 +112,17 @@ def get_capacity_types():
 def get_data_columns():
     return __data_columns
 
+def get_related_vehicles(price,man_year):
+    li = list()
+    vehicle_list = json.loads(open('artifacts/data.json').read())
+    max_price = price + 100000.0
+    min_price = price - 100000.0
+    for vehicle in vehicle_list:
+        if vehicle['price'] > min_price and vehicle['price'] < max_price and vehicle['Year']==man_year:
+            li.append(vehicle)
+
+    return li
+
 if __name__ == '__main__':
     load_saved_artifacts()
     # print(get_transmission_types())
@@ -119,5 +131,6 @@ if __name__ == '__main__':
     # print(get_vehiclemodel_types())
     # print(get_capacity_types())
     # print(get_estimated_price('Toyota','CHR',2018,28983,'Petrol','Automatic','Used','1200'))
-    print(get_estimated_price('Suzuki','Alto',2015,15000,'Petrol','Automatic','Used','998'))
+    # print(get_estimated_price('Suzuki','Alto',2015,15000,'Petrol','Automatic','Used','998'))
+    print(get_related_vehicles(2985000.0,2016))
     # print(get_estimated_price('Toyota','Prius',2012,112000,'Petrol','Automatic','Used','1800'))

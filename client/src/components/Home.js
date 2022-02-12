@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Card, Accordion } from 'react-bootstrap';
+import "bootstrap/dist/js/bootstrap.bundle.js";
+import DataTable from "react-data-table-component";
 import axios from 'axios'
 
 function Home() {
@@ -19,6 +21,7 @@ function Home() {
     const [condition, setCondition] = useState("new");
     const [capacity, setCapacity] = useState("0");
     const [price, setPrice] = useState(0);
+    const [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,6 +86,151 @@ function Home() {
         });
 
     }
+
+    function seeRelatedVehicles() {
+        const vehicle_prop = { price: price, year: year };
+        axios.post("http://127.0.0.1:5000/get_related_vehicles", vehicle_prop).then((res) => {
+            setVehicles(res.data.vehicles);
+        }).catch((err) => {
+            alert(err);
+            if (err.response)
+                console.log(err.response)
+
+            if (err.request)
+                console.log(err.request)
+        });
+
+    }
+
+    const BootyPagination = ({
+        rowsPerPage,
+        rowCount,
+        onChangePage,
+        onChangeRowsPerPage, // available but not used here
+        currentPage
+    }) => {
+        const handleBackButtonClick = () => {
+            onChangePage(currentPage - 1);
+        };
+
+        const handleNextButtonClick = () => {
+            onChangePage(currentPage + 1);
+        };
+
+        const handlePageNumber = (e) => {
+            onChangePage(Number(e.target.value));
+        };
+
+        const pages = getNumberOfPages(rowCount, rowsPerPage);
+        const pageItems = toPages(pages);
+        const nextDisabled = currentPage === pageItems.length;
+        const previosDisabled = currentPage === 1;
+
+        return (
+            <nav>
+                <ul className="pagination">
+                    <li className="page-item">
+                        <button
+                            className="page-link"
+                            onClick={handleBackButtonClick}
+                            disabled={previosDisabled}
+                            aria-disabled={previosDisabled}
+                            aria-label="previous page"
+                        >
+                            Previous
+                </button>
+                    </li>
+                    {pageItems.map((page) => {
+                        const className =
+                            page === currentPage ? "page-item active" : "page-item";
+
+                        return (
+                            <li key={page} className={className}>
+                                <button
+                                    className="page-link"
+                                    onClick={handlePageNumber}
+                                    value={page}
+                                >
+                                    {page}
+                                </button>
+                            </li>
+                        );
+                    })}
+                    <li className="page-item">
+                        <button
+                            className="page-link"
+                            onClick={handleNextButtonClick}
+                            disabled={nextDisabled}
+                            aria-disabled={nextDisabled}
+                            aria-label="next page"
+                        >
+                            Next
+                </button>
+                    </li>
+                </ul>
+            </nav>
+        );
+    };
+
+    function getNumberOfPages(rowCount, rowsPerPage) {
+        return Math.ceil(rowCount / rowsPerPage);
+    }
+
+    function toPages(pages) {
+        const results = [];
+
+        for (let i = 1; i < pages; i++) {
+            results.push(i);
+        }
+
+        return results;
+    }
+
+    const columns = [
+        {
+            name: "Brand",
+            selector: (row) => row.Brand,
+            sortable: true
+        },
+        {
+            name: "Model",
+            selector: (row) => row.Model,
+            sortable: true
+        },
+        {
+            name: "Mileage (km)",
+            selector: (row) => parseInt(row.mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            sortable: true
+        },
+        {
+            name: "Fuel",
+            selector: (row) => row.Fuel,
+            sortable: true
+        },
+        {
+            name: "Transmission",
+            selector: (row) => row.Transmission,
+            sortable: true
+        },
+        {
+            name: "Condition",
+            selector: (row) => row.Condition,
+            sortable: true
+        },
+        {
+            name: "Capacity (cc)",
+            selector: (row) => row.capacity,
+            sortable: true
+        },
+        {
+            name: "Price (Rs.)",
+            selector: (row) => (parseInt(row.price).toString() + "/=").replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            sortable: true
+        }
+    ]
+
+    const related_vehicles = vehicles;
+    console.log(related_vehicles);
 
     return (
         <div>
@@ -192,23 +340,36 @@ function Home() {
                         </Col>
                     </Row>
                     <div className="d-grid">
-                        <Button type="submit" size="lg" style={{backgroundColor:'#008B8B'}}>
+                        <Button type="submit" size="lg" style={{ backgroundColor: '#008B8B' }}>
                             View Price
                     </Button>
                     </div>
                 </Form>
                 <br></br>
                 <Card className="text-center">
-                    <Card.Header>Predicted Price for <strong>{brand} {vehicle_model}</strong></Card.Header>
+                    <Card.Header>Predicted Price for 
+                        <strong>{" "+brand[0].toUpperCase() + brand.slice(1)} {vehicle_model[0].toUpperCase() + vehicle_model.slice(1)}</strong>
+                    </Card.Header>
                     <Card.Body>
-                        <Card.Title>Rs.{parseInt(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}/=</Card.Title>
+                        <Card.Title>Rs.{parseInt(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/=</Card.Title>
                         <Card.Text>
-                            See Related Vehicles
-                    </Card.Text>
-                        <Button style={{backgroundColor:'#008B8B'}}>See more</Button>
+                            Click the below button to view Related Vehicles
+                        </Card.Text>
+                        <Button style={{ backgroundColor: '#008B8B' }} onClick={seeRelatedVehicles}>Refresh</Button>
+                        <br></br>
+                        <br></br>
+                        <DataTable
+                            title="Relatable Vehicles with Same Manufactured Year"
+                            pagination
+                            paginationComponent={BootyPagination}
+                            defaultSortFieldID={1}
+                            columns={columns}
+                            data={related_vehicles} />
+
                     </Card.Body>
                     <Card.Footer className="text-muted">Last updated on Feb 2022</Card.Footer>
                 </Card>
+                <br></br>
             </Container>
         </div>
     )
