@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Row, Col, Card, Accordion } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import DataTable from "react-data-table-component";
 import axios from 'axios'
@@ -106,7 +106,6 @@ function Home() {
         rowsPerPage,
         rowCount,
         onChangePage,
-        onChangeRowsPerPage, // available but not used here
         currentPage
     }) => {
         const handleBackButtonClick = () => {
@@ -229,8 +228,33 @@ function Home() {
         }
     ]
 
-    const related_vehicles = vehicles;
-    console.log(related_vehicles);
+    // const related_vehicles = vehicles;
+
+    function filterData(vehicles, searchKey) {
+        const result = vehicles.filter((vehicle) =>
+            vehicle.Brand.toLowerCase().includes(searchKey) || vehicle.Model.toLowerCase().includes(searchKey)
+        )
+        setVehicles(result);
+    }
+
+    function handleSearchArea(e) {
+        const searchKey = e.currentTarget.value;
+        const vehicle_prop = { price: price, year: year };
+        axios.post("http://127.0.0.1:5000/get_related_vehicles", vehicle_prop).then((res) => {
+            filterData(res.data.vehicles, searchKey)
+        }).catch((err) => {
+            alert(err);
+            if (err.response)
+                console.log(err.response)
+
+            if (err.request)
+                console.log(err.request)
+        });
+    }
+
+    const SearchVehicle = <div className="col-lg-3 mt-2 mb-2">
+        <input className="form-control" type="search" placeholder="Search vehicle" name="searchQuery" onChange={handleSearchArea}></input>
+    </div>
 
     return (
         <div>
@@ -267,7 +291,7 @@ function Home() {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Year</Form.Label>
+                                <Form.Label>Year (Valid for vehicles manufactured above 2000)</Form.Label>
                                 <Form.Control type="number" placeholder="Enter the vehicle manufactured year" id="year" onChange={(e) => {
                                     setYear(parseInt(e.target.value))
                                 }} />
@@ -276,7 +300,7 @@ function Home() {
 
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Mileage</Form.Label>
+                                <Form.Label>Mileage (km)</Form.Label>
                                 <Form.Control type="float" placeholder="Enter the vehicle mileage" id="mileage" onChange={(e) => {
                                     setMileage(parseFloat(e.target.value))
                                 }} />
@@ -328,7 +352,7 @@ function Home() {
 
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Engine Capacity</Form.Label>
+                                <Form.Label>Engine Capacity (Please select the correct capacity to avoid unexpected results)</Form.Label>
                                 <Form.Select aria-label="Brand select" id="capacity" onChange={(e) => {
                                     setCapacity(e.target.value)
                                 }}  >
@@ -347,8 +371,8 @@ function Home() {
                 </Form>
                 <br></br>
                 <Card className="text-center">
-                    <Card.Header>Predicted Price for 
-                        <strong>{" "+brand[0].toUpperCase() + brand.slice(1)} {vehicle_model[0].toUpperCase() + vehicle_model.slice(1)}</strong>
+                    <Card.Header>Predicted Price for
+                        <strong>{" " + brand[0].toUpperCase() + brand.slice(1)} {vehicle_model[0].toUpperCase() + vehicle_model.slice(1)}</strong>
                     </Card.Header>
                     <Card.Body>
                         <Card.Title>Rs.{parseInt(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/=</Card.Title>
@@ -360,12 +384,17 @@ function Home() {
                         <br></br>
                         <DataTable
                             title="Relatable Vehicles with Same Manufactured Year"
+                            responsive
+                            subHeader
+                            columns={columns}
+                            data={vehicles}
+                            subHeaderComponent={SearchVehicle}
+                            striped={true}
+                            highlightOnHover={true}
                             pagination
                             paginationComponent={BootyPagination}
                             defaultSortFieldID={1}
-                            columns={columns}
-                            data={related_vehicles} />
-
+                        />
                     </Card.Body>
                     <Card.Footer className="text-muted">Last updated on Feb 2022</Card.Footer>
                 </Card>
