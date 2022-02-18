@@ -1,29 +1,40 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from flask_pymongo import PyMongo, ObjectId
 import database
 import util
 
 app = Flask(__name__)
-# app.config['MONGO_URI'] = 'mongodb+srv://Rashmika:Rashmika1998@vehicleprices.a4ddm.mongodb.net/vehicles?retryWrites=true&w=majority'  # db name
-# mongo = PyMongo(app)
 CORS(app)
 collection_name = database.get_db()["searched_vehicles"]
-# db = mongo.db.vehicles  # collection name
+
+@app.route('/get_vehicles', methods=['GET'])
+def get_vehicles():
+    li = []
+    for vehicle in collection_name.find():
+        vehicle['_id'] = str(vehicle['_id'])
+        li.append(vehicle)
+
+    response = jsonify({
+        'vehicles': li
+    })
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    return response
 
 
 @app.route('/add_vehicle', methods=['POST'])
 def store_vehicle():
-    id = collection_name.insert_one({
-        'brand': request.form['brand'],
-        'vehicle_model': request.form['vehicle_model'],
-        'year': int(request.form['year']),
-        'mileage': float(request.form['mileage']),
-        'fuel': request.form['fuel'],
-        'transmission': request.form['transmission'],
-        'condition': request.form['condition'],
-        'capacity': request.form['capacity'],
-        'price': float(request.form['price'])
+    collection_name.insert_one({
+        'brand': request.json['brand'],
+        'vehicle_model': request.json['vehicle_model'],
+        'year': int(request.json['year']),
+        'mileage': float(request.json['mileage']),
+        'fuel': request.json['fuel'],
+        'transmission': request.json['transmission'],
+        'condition': request.json['condition'],
+        'capacity': request.json['capacity'],
+        'price': float(request.json['price'])
     })
     response = jsonify({
         'status': "Vehicle added"
@@ -31,7 +42,6 @@ def store_vehicle():
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
-    # return jsonify({'id': str(ObjectId(id)), 'status': "Vehicle Added"})
 
 
 @app.route('/predict_vehicle_price', methods=['GET', 'POST'])

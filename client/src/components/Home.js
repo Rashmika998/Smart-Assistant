@@ -85,6 +85,21 @@ function Home() {
                 console.log(err.request)
         });
 
+        const searchedVehicle = {
+            brand, vehicle_model, year, mileage, fuel, transmission, condition, capacity, price
+        }
+
+        axios.post("http://127.0.0.1:5000/add_vehicle", searchedVehicle).then((res) => {
+            console.log(res.data.status);
+        }).catch((err) => {
+            alert(err);
+            if (err.response)
+                console.log(err.response)
+
+            if (err.request)
+                console.log(err.request)
+        });
+
     }
 
     function seeRelatedVehicles() {
