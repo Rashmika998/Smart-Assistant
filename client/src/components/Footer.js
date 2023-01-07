@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import './css/app.css'
 
 export default function Footer() {
@@ -10,10 +9,10 @@ export default function Footer() {
                     <div className="col-4 offset-1 col-sm-2">
                         <h5>Links</h5>
                         <ul className="list-unstyled">
-                            <li><Link to="#" style={{textDecoration:"none",color:"white"}}>Home</Link></li>
-                            <li><Link to="#"  style={{textDecoration:"none",color:"white"}}>About</Link></li>
-                            <li><Link to="#" style={{textDecoration:"none",color:"white"}}>Admin Login</Link></li>
-                            <li><Link to="#" style={{textDecoration:"none",color:"white"}}>Contact</Link></li>
+                            <li><a href="#" style={{textDecoration:"none",color:"white"}}>Home</a></li>
+                            <li><a href="#"  style={{textDecoration:"none",color:"white"}}>About</a></li>
+                            <li><a href="#" style={{textDecoration:"none",color:"white"}}>Admin Login</a></li>
+                            <li><a href="#" style={{textDecoration:"none",color:"white"}}>Contact</a></li>
                         </ul>
                     </div>
                     <div className="col-7 col-sm-5">

@@ -10,7 +10,11 @@ __vehiclemodel = None
 __brand = None
 __capacity = None
 
-def get_estimated_price(brand,vehicle_model,year,mileage,fuel,transmission,condition,capacity):
+
+# method to get estimated price
+def get_estimated_price(brand, vehicle_model, year, mileage, fuel, transmission, condition, capacity):
+
+    # select the index from the columns match with argument
     try:
         brand_index = __data_columns.index(brand.lower())
     except:
@@ -41,40 +45,40 @@ def get_estimated_price(brand,vehicle_model,year,mileage,fuel,transmission,condi
     except:
         capacity_index = -1
 
+    # create a numpy array with all the required indexes to predict the price
     x = np.zeros(len(__data_columns))
     x[0] = mileage
-    x[304]=2022-year
+    x[304] = 2022-year
     if brand_index >= 0:
         x[brand_index] = 1
-        
+
     if model_index >= 0:
         x[model_index] = 1
-        
+
     if transmission_index >= 0:
         x[transmission_index] = 1
-        
+
     if fuel_index >= 0:
         x[fuel_index] = 1
-        
+
     if condition_index >= 0:
         x[condition_index] = 1
 
     if capacity_index >= 0:
         x[capacity_index] = 1
 
-    return round(__model.predict([x])[0],2)
+    return round(__model.predict([x])[0], 2)
 
 
-def load_saved_artifacts():
+def load_saved_artifacts():  # method to load the column values to global variables
     print("loading saved artifacts...start")
-    global  __data_columns
+    global __data_columns
     global __transmission
     global __condition
     global __fuel
     global __vehiclemodel
     global __brand
     global __capacity
-   
 
     with open("artifacts/columns.json", "r") as f:
         __data_columns = json.load(f)['data_columns']
@@ -91,37 +95,47 @@ def load_saved_artifacts():
             __model = pickle.load(f)
     print("loading saved artifacts...done")
 
-def get_transmission_types():
+
+def get_transmission_types():  # method to return transmission types
     return __transmission
 
-def get_condition_types():
+
+def get_condition_types():  # method to return condition types
     return __condition
 
-def get_fuel_types():
+
+def get_fuel_types():  # method to return fuel types
     return __fuel
 
-def get_vehiclemodel_types():
+
+def get_vehiclemodel_types():  # method to return model types
     return __vehiclemodel
 
-def get_brand_types():
+
+def get_brand_types():  # method to return brand types
     return __brand
 
-def get_capacity_types():
+
+def get_capacity_types():  # method to return transmission types
     return __capacity
+
 
 def get_data_columns():
     return __data_columns
 
-def get_related_vehicles(price,man_year):
+
+# method to return vehicles with approximated prices and manufactured year with the predicted price
+def get_related_vehicles(price, man_year):
     li = list()
     vehicle_list = json.loads(open('artifacts/data.json').read())
     max_price = price + 100000.0
     min_price = price - 100000.0
     for vehicle in vehicle_list:
-        if vehicle['price'] > min_price and vehicle['price'] < max_price and vehicle['Year']==man_year:
+        if vehicle['price'] > min_price and vehicle['price'] < max_price and vehicle['Year'] == man_year:
             li.append(vehicle)
 
     return li
+
 
 if __name__ == '__main__':
     load_saved_artifacts()
@@ -132,5 +146,5 @@ if __name__ == '__main__':
     # print(get_capacity_types())
     # print(get_estimated_price('Toyota','CHR',2018,28983,'Petrol','Automatic','Used','1200'))
     # print(get_estimated_price('Suzuki','Alto',2015,15000,'Petrol','Automatic','Used','998'))
-    print(get_related_vehicles(2985000.0,2016))
+    print(get_related_vehicles(2985000.0, 2016))
     # print(get_estimated_price('Toyota','Prius',2012,112000,'Petrol','Automatic','Used','1800'))
