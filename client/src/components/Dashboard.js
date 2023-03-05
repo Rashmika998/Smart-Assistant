@@ -26,7 +26,7 @@ export default function Dashboard() {
               setBrands(res.data.brands);
             })
             .catch((err) => {
-              alert(err);
+              console.log(err);
             });
           let i = 0;
           brands.map((brand) => {
@@ -41,11 +41,11 @@ export default function Dashboard() {
           setBrandValues(brandVals);
         })
         .catch((err) => {
-          alert(err);
+          console.log(err);
         });
     };
     fetchData();
-  }, []);
+  }, [brands, brandVals]);
 
   const BootyPagination = ({
     rowsPerPage,
@@ -316,25 +316,24 @@ export default function Dashboard() {
       );
   }
 
-  // const related_vehicles = vehicles;
-
   function filterData(vehicles, searchKey) {
-    const result = vehicles.filter((vehicle) => {
-      String(vehicle.brand).toLowerCase().includes(searchKey) ||
-        String(vehicle.vehicle_model).toLowerCase().includes(searchKey);
-    });
+    const result = vehicles.filter(
+      (vehicle) =>
+        String(vehicle.brand).toLowerCase().includes(searchKey) ||
+        String(vehicle.vehicle_model).toLowerCase().includes(searchKey)
+    );
     setVehicles(result);
   }
 
   function handleSearchArea(e) {
-    const searchKey = e.target.value;
+    const searchKey = e.currentTarget.value;
     axios
       .get("http://127.0.0.1:5000/get_vehicles")
       .then((res) => {
         filterData(res.data.vehicles, searchKey);
       })
       .catch((err) => {
-        alert(err);
+        console.log(err);
         if (err.response) console.log(err.response);
 
         if (err.request) console.log(err.request);

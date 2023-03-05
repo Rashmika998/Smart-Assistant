@@ -32,7 +32,7 @@ function Predict() {
           setBrands(res.data.brands);
         })
         .catch((err) => {
-          alert(err);
+          console.Log(err);
         });
 
       axios
@@ -41,7 +41,7 @@ function Predict() {
           setModels(res.data.vehicle_models);
         })
         .catch((err) => {
-          alert(err);
+          console.Log(err);
         });
 
       axios
@@ -50,7 +50,7 @@ function Predict() {
           setFuels(res.data.fuels);
         })
         .catch((err) => {
-          alert(err);
+          console.Log(err);
         });
 
       axios
@@ -59,7 +59,7 @@ function Predict() {
           setTransmissions(res.data.transmissions);
         })
         .catch((err) => {
-          alert(err);
+          console.Log(err);
         });
 
       axios
@@ -68,7 +68,7 @@ function Predict() {
           setConditions(res.data.conditions);
         })
         .catch((err) => {
-          alert(err);
+          console.Log(err);
         });
 
       axios
@@ -77,7 +77,7 @@ function Predict() {
           setCapacities(res.data.capacities);
         })
         .catch((err) => {
-          alert(err);
+          console.Log(err);
         });
     };
     fetchData();
@@ -123,14 +123,14 @@ function Predict() {
             console.log(res.data.status);
           })
           .catch((err) => {
-            alert(err);
+            console.Log(err);
             if (err.response) console.log(err.response);
 
             if (err.request) console.log(err.request);
           });
       })
       .catch((err) => {
-        alert(err);
+        console.Log(err);
         if (err.response) console.log(err.response);
 
         if (err.request) console.log(err.request);
@@ -145,7 +145,7 @@ function Predict() {
         setVehicles(res.data.vehicles);
       })
       .catch((err) => {
-        alert(err);
+        console.Log(err);
         if (err.response) console.log(err.response);
 
         if (err.request) console.log(err.request);
@@ -441,7 +441,7 @@ function Predict() {
         filterData(res.data.vehicles, searchKey);
       })
       .catch((err) => {
-        alert(err);
+        console.Log(err);
         if (err.response) console.log(err.response);
 
         if (err.request) console.log(err.request);
