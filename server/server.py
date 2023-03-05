@@ -3,101 +3,113 @@ from flask_cors import CORS
 import database
 import util
 import bcrypt
+from bson import json_util
+import json
 
 app = Flask(__name__)
 CORS(app)
 collection_name = database.get_db()["searched_vehicles"]
+collection_name_admin = database.get_db()["admins"]
+
 
 @app.route('/add_admin', methods=['POST'])
 def add_admin():  # route to add an admin
     try:
-        email = request.json.get('email',None)
-        password = request.json.get('password',None)
+        email = request.json['email']
+        password = request.json['password']
 
         if not email:
-            return "Missing Email",400
+            response = jsonify({
+                'status': "Please enter an email address"
+            })
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response
         if not password:
-            return "Missing Password",400
+            response = jsonify({
+                'status': "Please enter a password"
+            })
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response
 
-        hashed = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
-        collection_name.insert_one({
-            'email':email,
+        hashed = bcrypt.hashpw(password.encode(
+            'utf-8'), bcrypt.gensalt()).decode("utf-8")
+        collection_name_admin.insert_one({
+            'email': email,
             'password': hashed
         })
         response = jsonify({
-        'status': "Vehicle added"
-         })
+            'status': "Admin added"
+        })
         response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     except AttributeError:
         response = jsonify({
             'status': "Provided values are incorrect"
-            })
+        })
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
+
 
 @app.route('/login', methods=['POST'])
 def login():  # route to login
     try:
-        email = request.json.get('email',None)
-        password = request.json.get('password',None)
-
+        email = request.json['email']
+        password = request.json['password']
         if not email:
             response = jsonify({
-                'code':400,
+                'code': 400,
                 'status': "Missing Email"
-                })
+            })
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response
         if not password:
             response = jsonify({
-                'code':400,
+                'code': 400,
                 'status': "Missing Password"
-                })
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            return response
-        
-        user = collection_name.find_one({
-            'email':email
-        })
-        if not user:
-            response = jsonify({
-                'code':400,
-                'status': "User not found"
-                })
+            })
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response
 
-        if bcrypt.checkpw(password.encode('utf-8'),user.password):
+        user = collection_name_admin.find_one({
+            'email': email
+        })
+        if not user:
             response = jsonify({
-                'status': "User Logged in"
-                })
+                'status': json.loads(json_util.dumps(user))
+            })
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response
+        if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            response = jsonify({
+                'code': 200,
+                'status': json.loads(json_util.dumps(user))
+            })
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response
         else:
             response = jsonify({
                 'status': "Entered details are incorrect"
-                })
+            })
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response
 
     except AttributeError:
         response = jsonify({
             'status': "Provided values are incorrect"
-            })
+        })
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
 
 
-@app.route('/get_vehicles', methods=['GET'])
+@app.route('/get_vehicles', methods=['GET', 'POST'])
 def get_vehicles():  # route to get the vehicles
     li = []
     for vehicle in collection_name.find():
         vehicle['_id'] = str(vehicle['_id'])
         li.append(vehicle)
-
     response = jsonify({
-        'vehicles': li
+        'vehicles': json.loads(json_util.dumps(li))
     })
 
     response.headers.add('Access-Control-Allow-Origin', '*')

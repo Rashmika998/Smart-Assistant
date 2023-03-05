@@ -3,7 +3,7 @@ import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import Background1 from "./assets/01.jpg";
+import Background1 from "./assets/bot.gif";
 
 function Predict() {
   const [brands, setBrands] = useState([]);
@@ -255,17 +255,17 @@ function Predict() {
     },
     {
       name: "Fuel",
-      selector: (row) => row.Fuel,
+      selector: (row) => returnFuelType(row.Fuel),
       sortable: true,
     },
     {
       name: "Transmission",
-      selector: (row) => row.Transmission,
+      selector: (row) => returnTransmissionType(row.Transmission),
       sortable: true,
     },
     {
       name: "Condition",
-      selector: (row) => row.Condition,
+      selector: (row) => returnConditionType(row.Condition),
       sortable: true,
     },
     {
@@ -281,6 +281,145 @@ function Predict() {
         ),
     },
   ];
+
+  function returnTransmissionType(transmission_type) {
+    if (transmission_type === "Automatic")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-success"
+        >
+          Automatic
+        </button>
+      );
+    else if (transmission_type === "Manual")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-warning"
+        >
+          Manual
+        </button>
+      );
+    else if (transmission_type === "Tiptronic")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-info"
+        >
+          Tiptronic
+        </button>
+      );
+    else if (transmission_type === "Other Transmission")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-secondary"
+        >
+          Other Transmission
+        </button>
+      );
+  }
+
+  function returnConditionType(condition_type) {
+    if (condition_type === "Used")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-danger"
+        >
+          Used
+        </button>
+      );
+    else if (condition_type === "New")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-success"
+        >
+          New
+        </button>
+      );
+    else if (condition_type === "Reconditioned")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-warning"
+        >
+          Reconditioned
+        </button>
+      );
+  }
+
+  function returnFuelType(fuel_type) {
+    if (fuel_type === "Petrol")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-warning"
+        >
+          Petrol
+        </button>
+      );
+    else if (fuel_type === "Hybrid")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-dark"
+        >
+          Hybrid
+        </button>
+      );
+    else if (fuel_type === "Diesel")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-secondary"
+        >
+          Diesel
+        </button>
+      );
+    else if (fuel_type === "Electric")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-info"
+        >
+          Electric
+        </button>
+      );
+    else if (fuel_type === "CNG")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-danger"
+        >
+          CNG
+        </button>
+      );
+    else if (fuel_type === "Other Transmission")
+      return (
+        <button
+          style={{ fontSize: "12px", borderRadius: "20px" }}
+          type="button"
+          class="btn btn-success"
+        >
+          Other Transmission
+        </button>
+      );
+  }
 
   // const related_vehicles = vehicles;
 
@@ -327,194 +466,217 @@ function Predict() {
       <Container>
         <Form onSubmit={getPrice}>
           <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Vehicle Brand</Form.Label>
-                <Form.Select
-                  aria-label="Brand select"
-                  id="brand"
-                  onChange={(e) => {
-                    setBrand(e.target.value);
-                  }}
-                >
-                  {brands.map((brand, index) => (
-                    <option key={index} value={brand}>
-                      {brand}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
+            <Col md={8}>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Vehicle Brand</Form.Label>
+                    <Form.Select
+                      aria-label="Brand select"
+                      id="brand"
+                      onChange={(e) => {
+                        setBrand(e.target.value);
+                      }}
+                    >
+                      {brands.map((brand, index) => (
+                        <option key={index} value={brand}>
+                          {brand}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
 
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Vehicle Model</Form.Label>
-                <Form.Select
-                  aria-label="Brand select"
-                  id="vehicle_model"
-                  onChange={(e) => {
-                    setModel(e.target.value);
-                  }}
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Vehicle Model</Form.Label>
+                    <Form.Select
+                      aria-label="Brand select"
+                      id="vehicle_model"
+                      onChange={(e) => {
+                        setModel(e.target.value);
+                      }}
+                    >
+                      {models.map((model, index) => (
+                        <option key={index} value={model}>
+                          {model}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Col md={12}>
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    Year (Valid for vehicles manufactured above 2000)
+                  </Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter the vehicle manufactured year"
+                    id="year"
+                    onChange={(e) => {
+                      setYear(parseInt(e.target.value));
+                    }}
+                  />
+                </Form.Group>
+              </Col>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Mileage (km)</Form.Label>
+                    <Form.Control
+                      type="float"
+                      placeholder="Enter the vehicle mileage"
+                      id="mileage"
+                      onChange={(e) => {
+                        setMileage(parseFloat(e.target.value));
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Fuel Type</Form.Label>
+                    <Form.Select
+                      aria-label="Fuel select"
+                      id="fuel"
+                      onChange={(e) => {
+                        setFuel(e.target.value);
+                      }}
+                    >
+                      {fuels.map((fuel, index) => (
+                        <option key={index} value={fuel}>
+                          {fuel}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Transmission Type</Form.Label>
+                    <Form.Select
+                      aria-label="Transmission select"
+                      id="transmssion"
+                      onChange={(e) => {
+                        setTransmission(e.target.value);
+                      }}
+                    >
+                      {transmissions.map((transmssion, index) => (
+                        <option key={index} value={transmssion}>
+                          {transmssion}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Condition Type</Form.Label>
+                    <Form.Select
+                      aria-label="Condition select"
+                      id="condition"
+                      onChange={(e) => {
+                        setCondition(e.target.value);
+                      }}
+                    >
+                      {conditions.map((condition, index) => (
+                        <option key={index} value={condition}>
+                          {condition}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={12}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>
+                      Engine Capacity (Please select the correct capacity to
+                      avoid unexpected results)
+                    </Form.Label>
+                    <Form.Select
+                      aria-label="Brand select"
+                      id="capacity"
+                      onChange={(e) => {
+                        setCapacity(e.target.value);
+                      }}
+                    >
+                      {capacities.map((capacity, index) => (
+                        <option key={index} value={capacity}>
+                          {capacity}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <div className="d-grid">
+                <Button
+                  type="submit"
+                  size="lg"
+                  style={{ backgroundColor: "#008B8B" }}
                 >
-                  {models.map((model, index) => (
-                    <option key={index} value={model}>
-                      {model}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
+                  <span className="fa fa-money fa-lg"></span>&nbsp;Predict Price
+                </Button>
+              </div>
+            </Col>
+            <Col md={4}>
+              <Card style={{ border: "none" }}>
+                <Card.Body>
+                  <img
+                    src={Background1}
+                    style={{
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "100%",
+                    }}
+                  ></img>
+                  <Card.Header
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "10px",
+                      backgroundColor: "#008B8B",
+                      color: "white",
+                    }}
+                  >
+                    Predicted Price for
+                    <strong>
+                      {" " + brand[0].toUpperCase() + brand.slice(1)}{" "}
+                      {vehicle_model[0].toUpperCase() + vehicle_model.slice(1)}
+                    </strong>
+                    <br></br>
+                    <Card.Title style={{ textAlign: "center" }}>
+                      Rs.
+                      {parseInt(price)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      /=
+                    </Card.Title>
+                  </Card.Header>
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
-
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>
-                  Year (Valid for vehicles manufactured above 2000)
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter the vehicle manufactured year"
-                  id="year"
-                  onChange={(e) => {
-                    setYear(parseInt(e.target.value));
-                  }}
-                />
-              </Form.Group>
-            </Col>
-
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Mileage (km)</Form.Label>
-                <Form.Control
-                  type="float"
-                  placeholder="Enter the vehicle mileage"
-                  id="mileage"
-                  onChange={(e) => {
-                    setMileage(parseFloat(e.target.value));
-                  }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Fuel Type</Form.Label>
-                <Form.Select
-                  aria-label="Fuel select"
-                  id="fuel"
-                  onChange={(e) => {
-                    setFuel(e.target.value);
-                  }}
-                >
-                  {fuels.map((fuel, index) => (
-                    <option key={index} value={fuel}>
-                      {fuel}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Transmission Type</Form.Label>
-                <Form.Select
-                  aria-label="Transmission select"
-                  id="transmssion"
-                  onChange={(e) => {
-                    setTransmission(e.target.value);
-                  }}
-                >
-                  {transmissions.map((transmssion, index) => (
-                    <option key={index} value={transmssion}>
-                      {transmssion}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Condition Type</Form.Label>
-                <Form.Select
-                  aria-label="Condition select"
-                  id="condition"
-                  onChange={(e) => {
-                    setCondition(e.target.value);
-                  }}
-                >
-                  {conditions.map((condition, index) => (
-                    <option key={index} value={condition}>
-                      {condition}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>
-                  Engine Capacity (Please select the correct capacity to avoid
-                  unexpected results)
-                </Form.Label>
-                <Form.Select
-                  aria-label="Brand select"
-                  id="capacity"
-                  onChange={(e) => {
-                    setCapacity(e.target.value);
-                  }}
-                >
-                  {capacities.map((capacity, index) => (
-                    <option key={index} value={capacity}>
-                      {capacity}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-          <div className="d-grid">
-            <Button
-              type="submit"
-              size="lg"
-              style={{ backgroundColor: "#008B8B" }}
-            >
-              View Price
-            </Button>
-          </div>
         </Form>
         <br></br>
         <Card className="text-center">
-          <Card.Header>
-            Predicted Price for
-            <strong>
-              {" " + brand[0].toUpperCase() + brand.slice(1)}{" "}
-              {vehicle_model[0].toUpperCase() + vehicle_model.slice(1)}
-            </strong>
-          </Card.Header>
           <Card.Body>
-            <Card.Title>
-              Rs.
-              {parseInt(price)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              /=
-            </Card.Title>
             <Card.Text>
-              Click the below button to view Related Vehicles
+              Click the below button to view the vehicles with same manufactured
+              year
             </Card.Text>
             <Button
               style={{ backgroundColor: "#008B8B" }}
               onClick={seeRelatedVehicles}
             >
-              See more...
+              <span className="fa fa-refresh fa-lg"></span>&nbsp;Refresh
             </Button>
             <br></br>
             <br></br>
