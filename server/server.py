@@ -5,6 +5,7 @@ import util
 import bcrypt
 from bson import json_util
 import json
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -232,4 +233,5 @@ def get_related_vehicles():  # route to get related vehicles with same price(in 
 if __name__ == "__main__":
     print("Starting Python Flask Server For Vehicle Price Prediction...")
     util.load_saved_artifacts()
-    app.run()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
