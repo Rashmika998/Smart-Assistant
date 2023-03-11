@@ -36,7 +36,7 @@ const Home = () => {
                 bottom: "50%",
               }}
             >
-              <h1 style={{ fontSize: "10vw" }}>Adoptive</h1>
+              <h1 style={{ fontSize: "10vw" }}>Reliable</h1>
             </Carousel.Caption>{" "}
           </Carousel.Item>
           <Carousel.Item>
@@ -50,7 +50,7 @@ const Home = () => {
                 bottom: "50%",
               }}
             >
-              <h1 style={{ fontSize: "10vw" }}>Result Oriented</h1>
+              <h1 style={{ fontSize: "10vw" }}>Available</h1>
             </Carousel.Caption>{" "}
           </Carousel.Item>
         </Carousel>

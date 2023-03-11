@@ -40,7 +40,7 @@ export default function Header() {
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/predict">Predict</Nav.Link>
               <Nav.Link href="/login">Admin Login</Nav.Link>
-              <NavDropdown title="Dropdown" id="offcanvasNavbarDropdown">
+              {/* <NavDropdown title="Dropdown" id="offcanvasNavbarDropdown">
                 <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">
                   Another action
@@ -49,7 +49,7 @@ export default function Header() {
                 <NavDropdown.Item href="#action5">
                   Something else here
                 </NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdown> */}
             </Nav>
             <Form className="d-flex">
               <FormControl

@@ -45,7 +45,7 @@ export default function Dashboard() {
         });
     };
     fetchData();
-  }, [brands, brandVals]);
+  }, []);
 
   const BootyPagination = ({
     rowsPerPage,
@@ -69,7 +69,6 @@ export default function Dashboard() {
     const pageItems = toPages(pages);
     const nextDisabled = currentPage === pageItems.length;
     const previosDisabled = currentPage === 1;
-
     return (
       <nav>
         <ul className="pagination">
@@ -177,6 +176,7 @@ export default function Dashboard() {
   ];
 
   function returnTransmissionType(transmission_type) {
+    console.log("lk");
     if (transmission_type === "automatic")
       return (
         <button
